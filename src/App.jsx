@@ -1,24 +1,22 @@
+// src/App.jsx
 import React from 'react';
-import {Button, Container} from '@mui/material';
+import { Provider } from 'react-redux';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import store from './store';
+import Home from './pages/Home';
+import Login from './pages/Login';
 
-function App() {
-    // 카카오 로그인 API 호출
-    const handleKakaoLogin = async () => {
-        window.location.href = "http://localhost:8080/oauth2/authorization/kakao"
-    };
-
-    return (
-        <Container>
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleKakaoLogin}
-                size="large"
-            >
-                버튼
-            </Button>
-        </Container>
-    );
-}
+const App = () => {
+  return (
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </Router>
+    </Provider>
+  );
+};
 
 export default App;
