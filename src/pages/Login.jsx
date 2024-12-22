@@ -11,7 +11,7 @@ const Login = () => {
   const [openModal, setOpenModal] = useState(false); // 모달 오픈 상태 관리
 
   // 카카오 로그인 URL (카카오 앱 키와 리다이렉트 URI를 설정해야 함)
-  const KAKAO_LOGIN = "http://localhost:8080/oauth2/authorization/kakao"; // 서버에서 처리하는 카카오 로그인 URI
+  const KAKAO_LOGIN_URL = import.meta.env.VITE_API_URL + "/oauth2/authorization/kakao"; // 서버에서 처리하는 카카오 로그인 URI
 
   useEffect(() => {
     const handleAuth = async () => {
@@ -99,7 +99,7 @@ const Login = () => {
             variant="contained"
             color="warning"
             size="large"
-            href={KAKAO_LOGIN}
+            href={KAKAO_LOGIN_URL}
             sx={{
               width: 'auto', // 버튼 너비 자동 설정
               backgroundColor: "#FEE500",

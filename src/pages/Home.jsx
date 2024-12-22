@@ -7,7 +7,7 @@ const Home = () => {
   const accessToken = useSelector((state) => state.auth.accessToken);
   const navigate = useNavigate();
 
-  const LOGOUT_URL = "http://localhost:8080/logout";
+  const LOGOUT_URL = import.meta.env.VITE_API_URL + "/logout";
 
   return (
     <Box textAlign="center" mt={5}>
