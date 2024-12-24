@@ -1,34 +1,35 @@
 import React from "react";
-import {useSelector} from "react-redux";
-import {Box, Typography, Button} from "@mui/material";
-import {useNavigate} from "react-router-dom";
-import axios from "../api/axios"; // axios를 사용하여 HTTP 요청
+import { useDispatch, useSelector } from "react-redux";
+import { Box, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import axios from "../api/axios";
+import { setAccessToken } from "../slices/authSlice.js";
 
 const Home = () => {
-  const accessToken = useSelector((state) => state.auth.accessToken); // Redux에서 accessToken 가져오기
+  const accessToken = useSelector((state) => state.auth.accessToken);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const LOGOUT_URL = import.meta.env.VITE_API_URL + "/logout";
 
-  // 회원 탈퇴 처리 함수
   const handleDeleteAccount = async () => {
     try {
-      // accessToken이 있는지 확인 후 DELETE 요청 보내기
       if (accessToken) {
         const response = await axios.delete("/users/me");
-
-        // 탈퇴가 성공적으로 처리되었을 때
         if (response.status === 200) {
           console.log("회원 탈퇴가 완료되었습니다.");
-          // 성공 시 로그아웃 또는 리다이렉트
-          navigate("/login"); // 예: 로그인 페이지로 이동
+          const response = await axios.delete('/auth/refresh-token');
+          if (response.status === 200) {
+            dispatch(setAccessToken(null));
+            navigate('/');
+          } else {
+            console.error('로그아웃 실패');
+          }
         }
       } else {
         console.error("사용자 인증이 필요합니다.");
       }
     } catch (error) {
       console.error("회원 탈퇴 실패:", error);
-      // 실패 시 사용자에게 에러 메시지 등을 표시할 수 있음
     }
   };
 
@@ -38,8 +39,16 @@ const Home = () => {
         메인 페이지
       </Typography>
       {accessToken ? (
-        <>
-          <Typography variant="body1" gutterBottom>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column", // 세로 정렬
+            alignItems: "center",
+            gap: 2, // 요소 간의 간격
+            mt: 4,
+          }}
+        >
+          <Typography variant="body1">
             로그인 완료!
           </Typography>
           <Button
@@ -47,22 +56,32 @@ const Home = () => {
             color="secondary"
             size="large"
             href={LOGOUT_URL}
-            sx={{mb: 2}} // 아래 버튼들과 간격 추가
           >
             로그아웃
           </Button>
           <Typography
             variant="body2"
             color="error"
-            sx={{cursor: "pointer", mt: 2}}
-            onClick={handleDeleteAccount} // 회원 탈퇴 버튼 클릭 시 함수 호출
+            sx={{
+              cursor: "pointer",
+              display: "inline-block", // 텍스트 길이에 맞는 클릭 영역
+            }}
+            onClick={handleDeleteAccount}
           >
             회원 탈퇴
           </Typography>
-        </>
+        </Box>
       ) : (
-        <>
-          <Typography variant="body1" gutterBottom>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column", // 세로 정렬
+            alignItems: "center",
+            gap: 2, // 요소 간의 간격
+            mt: 4,
+          }}
+        >
+          <Typography variant="body1">
             로그인하지 않았습니다.
           </Typography>
           <Button
@@ -70,24 +89,22 @@ const Home = () => {
             color="primary"
             size="large"
             onClick={() => navigate("/login")}
-            sx={{mb: 2}} // 아래 버튼들과 간격 추가
           >
             로그인 페이지로 이동
           </Button>
-        </>
+        </Box>
       )}
 
-      {/* 버튼들을 세로로 배치 */}
+      {/* 추가 버튼 세로 배치 */}
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          gap: 2,
           mt: 4,
-          gap: 2, // 버튼 간 간격
         }}
       >
-        {/* User 페이지로 이동 버튼 */}
         <Button
           variant="contained"
           color="info"
@@ -97,7 +114,6 @@ const Home = () => {
           User 페이지로 이동
         </Button>
 
-        {/* Admin 페이지로 이동 버튼 */}
         <Button
           variant="contained"
           color="warning"

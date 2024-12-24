@@ -11,7 +11,8 @@ const User = () => {
         const response = await axios.get('/user');
         setData(response.data);
       } catch (err) {
-        setError(err.response ? err.response.data.message : 'API 호출 실패');
+        console.log(err)
+        setError(err.response === 401 ? '권한이 없습니다.' : 'API 호출 실패');
       }
     };
 

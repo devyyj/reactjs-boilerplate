@@ -11,7 +11,7 @@ const Admin = () => {
         const response = await axios.get('/admin');
         setData(response.data);
       } catch (err) {
-        setError(err.response ? err.response.data.message : 'API 호출 실패');
+        setError(err.response === 401 ? '권한이 없습니다.' : 'API 호출 실패');
       }
     };
 

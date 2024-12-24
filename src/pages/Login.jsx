@@ -26,9 +26,7 @@ const Login = () => {
       if (logout !== null) {
         try {
           // 서버에서 로그아웃 요청 (refreshToken 삭제)
-          const response = await axios.delete('/auth/refresh-token', {
-            withCredentials: true, // 쿠키를 포함하여 요청
-          });
+          const response = await axios.delete('/auth/refresh-token');
 
           if (response.status === 200) {
             dispatch(setAccessToken(null)); // Redux에서 액세스 토큰 초기화
