@@ -16,7 +16,6 @@ const Home = () => {
       if (accessToken) {
         const response = await axios.delete("/users/me");
         if (response.status === 200) {
-          console.log("회원 탈퇴가 완료되었습니다.");
           const response = await axios.delete('/auth/refresh-token');
           if (response.status === 200) {
             dispatch(setAccessToken(null));

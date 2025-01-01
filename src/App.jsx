@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import store from './store';
 import axios from './api/axios'; // Axios 기본 설정 파일
 import {setAccessToken} from './slices/authSlice'; // 액세스 토큰 설정 액션
+import {NotificationProvider} from './components/NotificationContext.jsx';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import User from "./pages/User.jsx";
@@ -22,7 +23,7 @@ const AppContent = () => {
           dispatch(setAccessToken(response.data.access_token)); // Redux에 저장
         }
       } catch (error) {
-        console.info('Browser refresh and failed to reissue access token:', error.response?.data || error.message);
+        console.info('Browser refresh and failed to reissue access token:', error.response.data.message);
       } finally {
         setIsInitialized(true); // 초기화 완료
       }
@@ -50,7 +51,9 @@ const AppContent = () => {
 
 const App = () => (
   <Provider store={store}>
-    <AppContent/>
+    <NotificationProvider>
+      <AppContent/>
+    </NotificationProvider>
   </Provider>
 );
 
