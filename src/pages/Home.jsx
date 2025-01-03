@@ -83,14 +83,6 @@ const Home = () => {
           <Typography variant="body1">
             로그인하지 않았습니다.
           </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={() => navigate("/login")}
-          >
-            로그인 페이지로 이동
-          </Button>
         </Box>
       )}
 
